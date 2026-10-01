@@ -3,68 +3,117 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#09090d">
-  <title>RavenGPT Control Hub</title>
+  <meta name="theme-color" content="#050507">
+  <meta name="color-scheme" content="dark">
+  <title>RavenGPT • Command Center</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
   <section id="login" class="login hidden">
-    <div class="login-card">
-      <div class="raven-logo">R</div>
-      <span class="eyebrow">RAVENGPT</span>
-      <h1>Discord Control Hub</h1>
-      <p>Secure bot management. Your bot token stays server-side.</p>
-      <a class="button primary big" href="/auth/login">Continue with Discord</a>
+    <div class="login-shell">
+      <div class="login-brand">
+        <div class="raven-mark large" aria-hidden="true"><span>R</span></div>
+        <div>
+          <div class="brand-word">RAVEN<span>GPT</span></div>
+          <div class="brand-sub">DISCORD COMMAND CENTER</div>
+        </div>
+      </div>
+      <div class="login-copy">
+        <div class="overline">SECURE CONTROL PLANE</div>
+        <h1>Run your Discord bot from one clean dashboard.</h1>
+        <p>Messages, embeds, uploads, server controls, members, roles, emojis, bot presence and installation — built around RavenGPT.</p>
+      </div>
+      <div class="login-features">
+        <div><b>01</b><span>Bot control</span></div>
+        <div><b>02</b><span>Server tools</span></div>
+        <div><b>03</b><span>Mobile ready</span></div>
+      </div>
+      <a class="btn btn-primary btn-xl" href="/auth/login">
+        <span>Continue with Discord</span><strong>→</strong>
+      </a>
+      <p class="login-note">Your bot token stays on the server and is never sent to this browser.</p>
     </div>
   </section>
 
   <div id="app" class="app hidden">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="raven-logo small">R</div>
-        <div><b>RavenGPT</b><span>Control Hub</span></div>
+    <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+    <aside id="sidebar" class="sidebar">
+      <div class="side-brand">
+        <div class="raven-mark"><span>R</span></div>
+        <div class="brand-lockup">
+          <div class="brand-word">RAVEN<span>GPT</span></div>
+          <div class="brand-sub">COMMAND CENTER</div>
+        </div>
+        <button id="closeSidebar" class="icon-btn mobile-only" aria-label="Close navigation">×</button>
       </div>
 
-      <div class="guild-box">
-        <label>SERVER</label>
-        <select id="guildSelect"></select>
+      <div class="workspace-card">
+        <div class="workspace-label">ACTIVE SERVER</div>
+        <div class="server-select-wrap">
+          <span class="server-dot"></span>
+          <select id="guildSelect" aria-label="Active Discord server"></select>
+        </div>
       </div>
 
-      <nav id="nav">
-        <button class="active" data-tab="overview">▦ <span>Overview</span></button>
-        <button data-tab="messages">✦ <span>Messages</span></button>
-        <button data-tab="embed">▣ <span>Embed Studio</span></button>
-        <button data-tab="media">⬆ <span>Media & Files</span></button>
-        <button data-tab="reactions">☺ <span>Reactions & Emojis</span></button>
-        <button data-tab="channels"># <span>Channels</span></button>
-        <button data-tab="roles">◇ <span>Roles</span></button>
-        <button data-tab="members">◎ <span>Members</span></button>
-        <button data-tab="presence">● <span>Bot Presence</span></button>
-        <button data-tab="audit">≡ <span>Audit Log</span></button>
+      <nav id="nav" class="nav">
+        <div class="nav-group">
+          <span class="nav-label">COMMAND</span>
+          <button class="nav-item active" data-tab="overview"><i>⌂</i><span>Command Center</span></button>
+          <button class="nav-item install-nav" data-tab="install"><i>＋</i><span>Add Bot to Server</span><em>ADD</em></button>
+          <button class="nav-item" data-tab="messages"><i>✦</i><span>Messages</span></button>
+          <button class="nav-item" data-tab="embed"><i>▣</i><span>Embed Studio</span></button>
+          <button class="nav-item" data-tab="media"><i>↑</i><span>Media & Files</span></button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-label">SERVER</span>
+          <button class="nav-item" data-tab="channels"><i>#</i><span>Channels</span></button>
+          <button class="nav-item" data-tab="roles"><i>◇</i><span>Roles</span></button>
+          <button class="nav-item" data-tab="members"><i>◎</i><span>Members</span></button>
+          <button class="nav-item" data-tab="emojis"><i>☺</i><span>Emojis & Reactions</span></button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-label">SYSTEM</span>
+          <button class="nav-item" data-tab="presence"><i>●</i><span>Bot Presence</span></button>
+          <button class="nav-item" data-tab="audit"><i>≡</i><span>Audit Log</span></button>
+        </div>
       </nav>
 
-      <div class="side-bottom">
-        <div class="bot-mini">
-          <i id="botDot"></i>
-          <div><b id="botName">Connecting</b><span id="botPing">— ms</span></div>
+      <div class="sidebar-status">
+        <div id="botAvatar" class="bot-avatar"><span>R</span></div>
+        <div class="bot-meta">
+          <div class="bot-name-row"><b id="botName">RavenGPT</b><span id="botDot" class="status-dot"></span></div>
+          <span id="botPing">Connecting…</span>
         </div>
-        <button id="logout" class="icon-button">↗</button>
+        <button id="logout" class="icon-btn" title="Sign out">↗</button>
       </div>
     </aside>
 
-    <main>
-      <header>
-        <div>
-          <span class="eyebrow">RAVENGPT / CONTROL HUB</span>
-          <h2 id="title">Overview</h2>
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="openSidebar" class="icon-btn mobile-only" aria-label="Open navigation">☰</button>
+          <div>
+            <div class="crumb"><span>RAVENGPT</span><b>/</b><span id="sectionLabel">COMMAND</span></div>
+            <h2 id="title">Command Center</h2>
+          </div>
         </div>
-        <div class="top-actions">
-          <select id="mobileGuildSelect" class="mobile-guild"></select>
-          <div id="user" class="user"></div>
-          <button id="refresh" class="button">Refresh</button>
+
+        <div class="topbar-actions">
+          <select id="mobileGuildSelect" class="mobile-guild" aria-label="Active Discord server"></select>
+          <button id="refresh" class="icon-btn refresh-btn" title="Refresh">↻</button>
+          <div id="user" class="user-chip"></div>
         </div>
       </header>
-      <section id="content" class="content"></section>
+
+      <section id="content" class="content">
+        <div class="skeleton hero-skeleton"></div>
+      </section>
     </main>
   </div>
 
@@ -72,12 +121,13 @@
 
   <div id="confirm" class="modal hidden">
     <div class="modal-card">
-      <div class="danger-mark">!</div>
+      <div class="modal-icon">!</div>
+      <div class="overline">CONFIRM ACTION</div>
       <h3 id="confirmTitle">Confirm action</h3>
       <p id="confirmText"></p>
-      <div class="row end">
-        <button id="confirmCancel" class="button">Cancel</button>
-        <button id="confirmOk" class="button danger">Confirm</button>
+      <div class="modal-actions">
+        <button id="confirmCancel" class="btn btn-ghost">Cancel</button>
+        <button id="confirmOk" class="btn btn-danger">Confirm</button>
       </div>
     </div>
   </div>
