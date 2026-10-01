@@ -34,5 +34,5 @@ app.use((e,req,res,next)=>{if(e instanceof multer.MulterError)return res.status(
 
 client.once('ready',()=>{console.log(`RavenGPT connected as ${client.user.tag}`);client.user.setPresence({status:'online',activities:[{name:cfg.botActivity,type:ActivityType.Watching}]});});
 client.on('error',e=>console.error('Discord:',e));
-await client.login(cfg.token);
-app.listen(cfg.port,()=>console.log(`RavenGPT Control Hub listening on ${cfg.port}`));
+app.listen(cfg.port,'0.0.0.0',()=>console.log(`RavenGPT Control Hub listening on ${cfg.port}`));
+client.login(cfg.token).catch(e=>console.error('Discord login failed:',e));
