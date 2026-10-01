@@ -54,14 +54,14 @@ export function mountCoreRoutes(app) {
 
   app.get('/api/me', requireAuth, (req,res) => res.json({
     user:req.session.user, csrf:req.session.csrf,
-    bot:{ ready:client.isReady(), id:client.user?.id, username:client.user?.username || 'Connecting', avatar:client.user?.displayAvatarURL({size:96}) || null, ping:client.ws.ping },
+    bot:{ ready:client.isReady(), id:client.user?.id, username:client.user?.username || 'Connecting', avatar:client.user?.displayAvatarURL({size:128}) || null, ping:client.ws.ping },
   }));
 
   app.get('/api/overview', requireAuth, async (req,res,next) => {
     try {
       const ids = await allowedGuildIds(req);
       const guilds = client.guilds.cache.filter(g => ids.has(g.id)).map(g => ({
-        id:g.id,name:g.name,icon:g.iconURL({size:96}),members:g.memberCount,
+        id:g.id,name:g.name,icon:g.iconURL({size:128}),members:g.memberCount,
         channels:g.channels.cache.size,roles:g.roles.cache.size,emojis:g.emojis.cache.size,
       }));
       res.json({ guilds, totals:{
