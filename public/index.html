@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090d">
+  <title>RavenGPT Control Hub</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <section id="login" class="login hidden">
+    <div class="login-card">
+      <div class="raven-logo">R</div>
+      <span class="eyebrow">RAVENGPT</span>
+      <h1>Discord Control Hub</h1>
+      <p>Secure bot management. Your bot token stays server-side.</p>
+      <a class="button primary big" href="/auth/login">Continue with Discord</a>
+    </div>
+  </section>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="raven-logo small">R</div>
+        <div><b>RavenGPT</b><span>Control Hub</span></div>
+      </div>
+
+      <div class="guild-box">
+        <label>SERVER</label>
+        <select id="guildSelect"></select>
+      </div>
+
+      <nav id="nav">
+        <button class="active" data-tab="overview">▦ <span>Overview</span></button>
+        <button data-tab="messages">✦ <span>Messages</span></button>
+        <button data-tab="embed">▣ <span>Embed Studio</span></button>
+        <button data-tab="media">⬆ <span>Media & Files</span></button>
+        <button data-tab="reactions">☺ <span>Reactions & Emojis</span></button>
+        <button data-tab="channels"># <span>Channels</span></button>
+        <button data-tab="roles">◇ <span>Roles</span></button>
+        <button data-tab="members">◎ <span>Members</span></button>
+        <button data-tab="presence">● <span>Bot Presence</span></button>
+        <button data-tab="audit">≡ <span>Audit Log</span></button>
+      </nav>
+
+      <div class="side-bottom">
+        <div class="bot-mini">
+          <i id="botDot"></i>
+          <div><b id="botName">Connecting</b><span id="botPing">— ms</span></div>
+        </div>
+        <button id="logout" class="icon-button">↗</button>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">RAVENGPT / CONTROL HUB</span>
+          <h2 id="title">Overview</h2>
+        </div>
+        <div class="top-actions">
+          <div id="user" class="user"></div>
+          <button id="refresh" class="button">Refresh</button>
+        </div>
+      </header>
+      <section id="content" class="content"></section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="confirm" class="modal hidden">
+    <div class="modal-card">
+      <div class="danger-mark">!</div>
+      <h3 id="confirmTitle">Confirm action</h3>
+      <p id="confirmText"></p>
+      <div class="row end">
+        <button id="confirmCancel" class="button">Cancel</button>
+        <button id="confirmOk" class="button danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
