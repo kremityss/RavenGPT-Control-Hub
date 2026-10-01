@@ -1,29 +1,23 @@
-import {
-  $,$$,state,toast,api,loadMe,loadOverview,loadGuild,
-  setHeader,openMobileNav,closeMobileNav
-} from './ui.js';
-import {
-  overviewTab,installTab,messagesTab,embedTab,mediaTab,emojisTab
-} from './tabs-core.js';
-import {
-  channelsTab,rolesTab,membersTab,presenceTab,auditTab
-} from './tabs-admin.js';
+import {$,$$,state,toast,api,loadMe,loadOverview,loadGuild,setHeader,openMobileNav,closeMobileNav} from './ui.js';
+import {overviewPanel,installPanel} from './panels-command.js';
+import {messagesPanel,embedPanel} from './panels-content.js';
+import {mediaPanel,emojisPanel} from './panels-media.js';
+import {channelsPanel,rolesPanel} from './panels-server.js';
+import {membersPanel} from './panels-members.js';
+import {presencePanel,auditPanel} from './panels-system.js';
 
 async function render(){
   setHeader(state.tab);
-
-  const guildRequired=['messages','embed','media','channels','roles','members','emojis'];
-  if(!state.guildId&&guildRequired.includes(state.tab)){
+  const needsGuild=['messages','embed','media','channels','roles','members','emojis'];
+  if(!state.guildId&&needsGuild.includes(state.tab)){
     $('#content').innerHTML=`
       <div class="install-layout">
         <section class="install-hero">
           <div class="raven-mark large"><span>R</span></div>
-          <div class="overline">NO SERVER CONNECTED</div>
-          <h1>Add <span>RavenGPT</span> to a server.</h1>
-          <p>This control requires a Discord server where RavenGPT is installed and your account has Manage Server or Administrator permission.</p>
-          <div class="install-actions">
-            <button class="btn btn-primary" id="emptyInstall">Add RavenGPT to Server <strong>→</strong></button>
-          </div>
+          <div class="overline">SERVER REQUIRED</div>
+          <h1>Connect <span>RavenGPT</span><br>to a server.</h1>
+          <p>This control needs a Discord server where RavenGPT is installed and your account has Manage Server or Administrator access.</p>
+          <div class="install-actions"><button class="btn btn-primary" id="emptyInstall">＋ Add RavenGPT to Server</button></div>
         </section>
       </div>`;
     $('#emptyInstall').onclick=()=>switchTab('install');
@@ -31,18 +25,17 @@ async function render(){
   }
 
   const reload=async()=>{await loadGuild();};
-
-  if(state.tab==='overview')overviewTab(switchTab);
-  if(state.tab==='install')installTab();
-  if(state.tab==='messages')messagesTab();
-  if(state.tab==='embed')embedTab();
-  if(state.tab==='media')mediaTab();
-  if(state.tab==='channels')channelsTab(reload);
-  if(state.tab==='roles')rolesTab(reload);
-  if(state.tab==='members')await membersTab();
-  if(state.tab==='emojis')emojisTab(reload);
-  if(state.tab==='presence')presenceTab();
-  if(state.tab==='audit')await auditTab();
+  if(state.tab==='overview')overviewPanel(switchTab);
+  if(state.tab==='install')installPanel();
+  if(state.tab==='messages')messagesPanel();
+  if(state.tab==='embed')embedPanel();
+  if(state.tab==='media')mediaPanel();
+  if(state.tab==='channels')channelsPanel(reload);
+  if(state.tab==='roles')rolesPanel(reload);
+  if(state.tab==='members')await membersPanel();
+  if(state.tab==='emojis')emojisPanel(reload);
+  if(state.tab==='presence')presencePanel();
+  if(state.tab==='audit')await auditPanel();
 }
 
 async function switchTab(tab){
@@ -57,29 +50,15 @@ async function changeGuild(value){
   state.guildId=value;
   $('#guildSelect').value=value;
   if($('#mobileGuildSelect'))$('#mobileGuildSelect').value=value;
-  try{
-    await loadGuild();
-    await render();
-  }catch(e){
-    toast(e.message);
-  }
+  try{await loadGuild();await render();}catch(e){toast(e.message);}
 }
 
 async function boot(){
   if(!await loadMe())return;
-
-  try{
-    await loadOverview();
-    await render();
-  }catch(e){
-    toast(e.message);
-  }
+  try{await loadOverview();await render();}catch(e){toast(e.message);}
 
   $('#guildSelect').onchange=()=>changeGuild($('#guildSelect').value);
-  if($('#mobileGuildSelect')){
-    $('#mobileGuildSelect').onchange=()=>changeGuild($('#mobileGuildSelect').value);
-  }
-
+  if($('#mobileGuildSelect'))$('#mobileGuildSelect').onchange=()=>changeGuild($('#mobileGuildSelect').value);
   $$('#nav .nav-item').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 
   $('#openSidebar').onclick=openMobileNav;
@@ -87,23 +66,11 @@ async function boot(){
   $('#sidebarBackdrop').onclick=closeMobileNav;
 
   $('#refresh').onclick=async()=>{
-    try{
-      await loadOverview();
-      await render();
-      toast('RavenGPT refreshed');
-    }catch(e){
-      toast(e.message);
-    }
+    try{await loadOverview();await render();toast('RavenGPT refreshed');}catch(e){toast(e.message);}
   };
 
   $('#logout').onclick=async()=>{
-    try{
-      await api('/auth/logout',{method:'POST',body:JSON.stringify({})});
-      location.reload();
-    }catch(e){
-      toast(e.message);
-    }
+    try{await api('/auth/logout',{method:'POST',body:JSON.stringify({})});location.reload();}catch(e){toast(e.message);}
   };
 }
-
 boot();
