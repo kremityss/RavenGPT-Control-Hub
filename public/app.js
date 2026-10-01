@@ -26,7 +26,9 @@ async function switchTab(tab){state.tab=tab;$$('#nav button').forEach(b=>b.class
 async function boot(){
   if(!await loadMe())return;
   try{await loadOverview();await render();}catch(e){toast(e.message);}
-  $('#guildSelect').onchange=async()=>{state.guildId=$('#guildSelect').value;try{await loadGuild();await render();}catch(e){toast(e.message);}};
+  const changeGuild=async value=>{state.guildId=value;$('#guildSelect').value=value;const mobile=$('#mobileGuildSelect');if(mobile)mobile.value=value;try{await loadGuild();await render();}catch(e){toast(e.message);}};
+  $('#guildSelect').onchange=()=>changeGuild($('#guildSelect').value);
+  if($('#mobileGuildSelect'))$('#mobileGuildSelect').onchange=()=>changeGuild($('#mobileGuildSelect').value);
   $$('#nav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
   $('#refresh').onclick=async()=>{try{await loadOverview();await render();toast('Refreshed');}catch(e){toast(e.message);}};
   $('#logout').onclick=async()=>{try{await api('/auth/logout',{method:'POST',body:JSON.stringify({})});location.reload();}catch(e){toast(e.message);}};
