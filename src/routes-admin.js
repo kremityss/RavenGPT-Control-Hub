@@ -35,6 +35,17 @@ export function mountAdminRoutes(app, upload) {
     catch(e) { res.status(400).json({error:e.message}); }
   });
 
+  app.delete('/api/emojis/:guildId/:emojiId', requireAuth, requireCsrf, requireGuild, async (req,res) => {
+    try {
+      const e=req.guild.emojis.cache.get(req.params.emojiId);
+      if(!e)throw new Error('Emoji not found');
+      const name=e.name;
+      await e.delete(cfg.panelName);
+      audit(req,'delete_emoji',{guildId:req.guild.id,emojiId:req.params.emojiId,name});
+      res.json({ok:true});
+    } catch(e) { res.status(400).json({error:e.message}); }
+  });
+
   app.get('/api/members/:guildId', requireAuth, requireGuild, async (req,res) => {
     try { const ms=await req.guild.members.fetch({limit:100}); res.json({members:ms.map(m=>({id:m.id,username:m.user.username,displayName:m.displayName,avatar:m.displayAvatarURL({size:64}),bot:m.user.bot,roles:m.roles.cache.filter(r=>r.id!==req.guild.id).map(r=>({id:r.id,name:r.name}))}))}); }
     catch(e) { res.status(400).json({error:e.message}); }
