@@ -31,7 +31,7 @@ export async function confirmAction(title,text){return new Promise(resolve=>{con
 
 export async function loadMe(){try{const data=await api('/api/me');state.me=data;state.csrf=data.csrf;showApp();$('#botName').textContent=data.bot.username;$('#botPing').textContent=`${data.bot.ping??'—'} ms`;$('#botDot').classList.toggle('online',!!data.bot.ready);$('#user').innerHTML=`${data.user.avatar?`<img src="${data.user.avatar}" alt="">`:''}<span>${esc(data.user.globalName||data.user.username)}</span>`;return true;}catch{showLogin();return false;}}
 
-export async function loadOverview(){state.overview=await api('/api/overview');const select=$('#guildSelect');select.innerHTML=state.overview.guilds.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('');if(!state.guildId||!state.overview.guilds.some(g=>g.id===state.guildId))state.guildId=state.overview.guilds[0]?.id||'';select.value=state.guildId;if(state.guildId)await loadGuild();}
+export async function loadOverview(){state.overview=await api('/api/overview');const html=state.overview.guilds.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('');const select=$('#guildSelect'),mobile=$('#mobileGuildSelect');select.innerHTML=html;if(mobile)mobile.innerHTML=html;if(!state.guildId||!state.overview.guilds.some(g=>g.id===state.guildId))state.guildId=state.overview.guilds[0]?.id||'';select.value=state.guildId;if(mobile)mobile.value=state.guildId;if(state.guildId)await loadGuild();}
 export async function loadGuild(){if(!state.guildId){state.guild=null;return;}state.guild=await api(`/api/guilds/${state.guildId}`);}
 
 export function metric(value,label){return `<div class="card quarter"><div class="metric">${value}</div><div class="metric-label">${label}</div></div>`;}
