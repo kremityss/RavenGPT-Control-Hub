@@ -181,3 +181,8 @@ input[type=color]{padding:5px;height:38px}
   .item{align-items:flex-start;flex-direction:column}.item-actions{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.item-actions .btn,.item-actions .button{white-space:nowrap}
   .login{padding:12px}.login-shell{padding:22px;border-radius:22px}.login-brand{margin-bottom:27px}.login-copy h1{font-size:39px}.login-features{gap:6px}.login-features div{padding:10px 8px}
 }
+
+.bot-avatar img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+.stat-value small{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:0}
+.panel .section-head:first-child{margin-top:0}
+@media(max-width:720px){.install-actions .btn{width:100%}.hero-actions .btn{flex:1 1 100%}}
