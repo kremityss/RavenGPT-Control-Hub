@@ -24,6 +24,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(session({name:'ravengpt.sid',secret:cfg.sessionSecret,resave:false,saveUninitialized:false,cookie:{httpOnly:true,sameSite:'lax',secure:cfg.prod,maxAge:12*60*60*1000}}));
 app.use('/api',rateLimit({windowMs:60_000,limit:150,standardHeaders:'draft-8',legacyHeaders:false}));
 app.locals.discord=client;
+app.get('/health',(req,res)=>res.json({ok:true,botReady:client.isReady(),uptime:Math.round(process.uptime())}));
 
 mountCoreRoutes(app);
 mountMessagingRoutes(app,upload);
