@@ -117,3 +117,24 @@ For a public deployment, use a persistent production session store instead of th
 - `public/styles.css` — RavenGPT UI
 - `public/app.js` — tabs and controls
 - `.env.example` — configuration template
+
+
+## Phone-only Railway deployment
+
+The repository is ready to deploy directly from GitHub, so no desktop computer is required.
+
+1. In Railway, create a project from the GitHub repository `kremityss/RavenGPT-Control-Hub`.
+2. Let Railway build from `main`. The included `railway.json` uses `npm start` and checks `/health`.
+3. Add these variables in Railway:
+   - `CLIENT_ID=1555059247425912984`
+   - `DISCORD_PUBLIC_KEY=d815d61cb80eeaadd0c6874206f7b047ea43d04365605f9e14b731dc0fc32813`
+   - `DISCORD_TOKEN` — use the newly regenerated bot token
+   - `CLIENT_SECRET` — Discord OAuth client secret
+   - `SESSION_SECRET` — a long random private value
+   - `NODE_ENV=production`
+4. Generate a Railway public domain.
+5. Set `REDIRECT_URI=https://YOUR-RAILWAY-DOMAIN/auth/callback` in Railway.
+6. Add the exact same callback URL under Discord Developer Portal → OAuth2 → Redirects.
+7. Redeploy if Railway does not automatically restart after the variable change.
+
+Never commit Discord tokens, OAuth client secrets, or session secrets to GitHub.
